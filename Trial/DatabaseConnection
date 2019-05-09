@@ -1,0 +1,35 @@
+import threading
+import subprocess
+import time
+import datetime
+from contextlib import ContextDecorator
+import mysql.connector
+import xml.etree.cElementTree as ET
+from mysql.connector import Error
+from mysql.connector import errorcode
+
+class DatabaseConnection():
+    # connection = mysql.connector.connect(host='192.168.0.96', user='adminer', password='Cft6cft6', database='vm-automate')
+
+    def __init__(self,connection):
+         self.connection = connection
+
+
+    def __enter__(self):
+        # self.connection = connection
+        cursor = self.connection.cursor()
+        return cursor
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+       self.connection.close()
+
+with DatabaseConnection(connection=mysql.connector.connect(host='192.168.0.96', user='adminer', password='Cft6cft6', database='vm-automate')) as cursor:
+    cursor.execute("select * from user")
+    myresult = cursor.fetchall()
+    for x in myresult:
+        print(x)
+
+
+
+if __name__== "__main__":
+  DatabaseConnection(connection=mysql.connector.connect(host='192.168.0.96', user='adminer', password='Cft6cft6', database='vm-automate'))
